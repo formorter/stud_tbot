@@ -78,8 +78,4 @@ class Anecdot():
         txt = txt.replace('{"content":"', '')
         txt = txt.replace('"}','')
         return txt
-
-a = Anecdot()
-for _ in range(10):
-    print(a.get_random())
-    print()
+        
