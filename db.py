@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 from tinydb import Query, TinyDB
 
 
@@ -13,7 +13,7 @@ class Database():
 
     print(d.all()) # отобразить базу
     """
-    def __init__(self, db: TinyDB|str=None) -> None:
+    def __init__(self, db: Union[TinyDB,str]=None) -> None:
         """Конструктор базы данных
 
         Args:
@@ -27,7 +27,7 @@ class Database():
                 db = TinyDB('db.json')
         self._db = db
 
-    def search(self, query: Dict|Query) -> List[Dict]:
+    def search(self, query: Union[Dict,Query]) -> List[Dict]:
         """Позволяет найти все вхождения в базе данных, по соответствующему запросу.
         Запрос выглядит как `{'field': 'value'}`.
 
@@ -59,7 +59,7 @@ class Database():
             return query
         return _all
 
-    def get(self, query: Dict|Query) -> Dict:
+    def get(self, query: Union[Dict,Query]) -> Dict:
         """Возвращает первое вхождения документа из базы данных, по соответствующему запросу.
         Запрос выглядит как `{'field': 'value'}`.
 
@@ -73,7 +73,7 @@ class Database():
             return self._db.get(Query()[list(query)[0]] == list(query.values())[0])
         return self._db.get(query)
 
-    def remove(self, query: Dict|Query):
+    def remove(self, query: Union[Dict,Query]):
         """Удаляет документ из базы данных, по соответствующему запросу.
         Запрос выглядит как `{'field': 'value'}`.
 
@@ -84,7 +84,7 @@ class Database():
             self._db.remove(Query()[list(query)[0]] == list(query.values())[0])
         self._db.remove(query)
 
-    def update(self, fields: Dict, query: Dict|Query):
+    def update(self, fields: Dict, query: Union[Dict, Query]):
         """Изменяет документы в базе данных, удовлетворяющие запросу.
         Запрос выглядит как `{'field': 'value'}`.
 
@@ -96,7 +96,7 @@ class Database():
             self._db.update(fields, Query()[list(query)[0]] == list(query.values())[0])
         self._db.update(fields, query)
 
-    def insert(self, fields: Dict|List[Dict]):
+    def insert(self, fields: Union[Dict,List[Dict]]):
         """Добавляет в базу данных новый документ.
 
         Args:
