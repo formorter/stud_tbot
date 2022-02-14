@@ -96,11 +96,14 @@ class Database():
             self._db.update(fields, Query()[list(query)[0]] == list(query.values())[0])
         self._db.update(fields, query)
 
-    def insert(self, fields: Dict):
+    def insert(self, fields: Dict|List[Dict]):
         """Добавляет в базу данных новый документ.
 
         Args:
             `fields (Dict)`: Новый документ.
         """
-        self._db.insert(fields)
+        if isinstance(fields, Dict):
+            self._db.insert(fields)
+        elif isinstance(fields, list):
+            self._db.insert_multiple(fields)
         
