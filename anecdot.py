@@ -1,4 +1,4 @@
-import json
+import ast
 from random import choice
 from requests import request
 from typing import List
@@ -74,4 +74,12 @@ class Anecdot():
             r = request(method='GET', url=f'{self._url}{mode}')
         elif self.modes:
             r = request(method='GET', url=f'{self._url}{choice(self.modes)}')
-        return json.loads(r.text, strict=False)['content']
+        txt = r.text
+        txt = txt.replace('{"content":"', '')
+        txt = txt.replace('"}','')
+        return txt
+
+a = Anecdot()
+for _ in range(10):
+    print(a.get_random())
+    print()
