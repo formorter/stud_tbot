@@ -79,3 +79,4 @@ class Anecdot():
         txt = txt.replace('"}','')
         return txt
         
+print('kinda sus')

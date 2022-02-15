@@ -1,0 +1,17 @@
+FROM python
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ENV MAIN_BOT_TOKEN=5177563463:AAGf_vvaRhmOp9IaSYBky6TUp-kWDzSUmzo
+ENV TEST_BOT_TOKEN=5129162861:AAEFYbGPZ-2RRXLd4sMMKnCjKbLea8EnLIE
+ENV GROUP_ID=-610500544
+ENV TZ=Europe/Moscow
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python3", "app.py"]
