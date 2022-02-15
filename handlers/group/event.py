@@ -21,29 +21,30 @@ anecdots = Anecdot()
 async def echo(message: types.Message):
     """Бездарный лог"""
     chat_ids[message.chat.id] = message.from_user
-    print(message.chat.id)
+    logging.info(message.chat.id)
     # text = f'{message.message_id} {message.from_user} {message.text}'
 
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
-    flag = False
-    week = False
+    with open('data/conf.txt', 'r') as f:
+        data = f.readline()
+        upperWeek = bool(data.split('=')[1])
     while True:
         await asyncio.sleep(sleep_for)
         now = datetime.now()
         day_of_week = now.strftime('%A')
-        if day_of_week == 'Monday' and not flag:
-            week = not week
-            flag = True
-        elif day_of_week != 'Monday':
-            flag = False
+        if day_of_week == 'Monday' and f'{now}'[11:16] == '00:00':
+            with open('data/conf.txt', 'w') as f:
+                upperWeek = not upperWeek
+                data = f'upperWeek={upperWeek}'
+                f.write(data)
         logging.info(f'Connected users: {chat_ids}')
         if day_of_week in database.all('day'):
             for lessons in all_lessons:
-                if week is lessons['isUpperWeek']:
+                if upperWeek is lessons['isUpperWeek']:
                     if day_of_week == lessons['day']:
                         if f"{now}"[11:16] == lessons['time']:
-                            logging.exception(f'{now}'[11:16], f'{lessons["name"]} - ВЫВЕДЕН')
+                            logging.info(f'{now}'[11:16], f'{lessons["name"]} - ВЫВЕДЕН')
                             await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
                                                                f"\n Пара {lessons['name']} у {lessons['teacher']} "
                                                                f"\n ссылка на мероприятие: {lessons['links']}",
