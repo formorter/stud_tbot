@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from datetime import datetime
 from aiogram import types
 import os
@@ -36,16 +37,16 @@ async def periodic(sleep_for):  # основной метод для обраб�
             flag = True
         elif day_of_week != 'Monday':
             flag = False
-        print(chat_ids)
+        logging.info(f'Connected users: {chat_ids}')
         if day_of_week in database.all('day'):
             for lessons in all_lessons:
                 if week is lessons['isUpperWeek']:
                     if day_of_week == lessons['day']:
                         if f"{now}"[11:16] == lessons['time']:
-                            print("BIG BRAIN TIME WOOOOOOOOOOOOOOW", f"{now}"[11:16], f"{lessons['name']} - ВЫВЕДЕН")
+                            logging.exception(f'{now}'[11:16], f'{lessons["name"]} - ВЫВЕДЕН')
                             await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
                                                                f"\n Пара {lessons['name']} у {lessons['teacher']} "
                                                                f"\n ссылка на мероприятие: {lessons['links']}",
                                                    disable_notification=True)
                         else:
-                            print(f"{lessons['name']}")
+                            print(f"{now}"[10:16], lessons['name'], lessons['isUpperWeek'])
