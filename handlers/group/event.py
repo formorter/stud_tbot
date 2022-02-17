@@ -21,8 +21,15 @@ anecdots = Anecdot()
 async def echo(message: types.Message):
     """Бездарный лог"""
     chat_ids[message.chat.id] = message.from_user
-    logging.info(message.chat.id)
+    logging.info(f'Пользователь [{message.chat.username}id={message.chat.id}] подключился')
     # text = f'{message.message_id} {message.from_user} {message.text}'
+    msg = await message.reply('Прив')
+
+
+async def delete_message(message: types.Message, sleep_time: int = 0):
+    await asyncio.sleep(sleep_time)
+    await bot.delete_message(chat_id=os.getenv('GROUP_ID'), message_id=message.message_id)
+    logging.info('Сообщение удалено')
 
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
@@ -44,10 +51,11 @@ async def periodic(sleep_for):  # основной метод для обраб�
                 if upperWeek is lessons['isUpperWeek']:
                     if day_of_week == lessons['day']:
                         if f"{now}"[11:16] == lessons['time']:
-                            logging.info(f'{now}'[11:16], f'{lessons["name"]} - ВЫВЕДЕН')
-                            await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
+                            print(f'[{now}]'[11:16], f'{lessons["name"]} - ВЫВЕДЕН')
+                            msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
                                                                f"\n Пара {lessons['name']} у {lessons['teacher']} "
                                                                f"\n ссылка на мероприятие: {lessons['links']}",
                                                    disable_notification=True)
-                        else:
-                            print(f"{now}"[10:16], lessons['name'], lessons['isUpperWeek'])
+                            asyncio.create_task(delete_message(msg, 600))
+            else:
+                logging.info('Проверка пройдена')
