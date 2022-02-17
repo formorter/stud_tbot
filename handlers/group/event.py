@@ -23,7 +23,7 @@ async def echo(message: types.Message):
     chat_ids[message.chat.id] = message.from_user
     logging.info(f'Пользователь [{message.chat.username}id={message.chat.id}] подключился')
     # text = f'{message.message_id} {message.from_user} {message.text}'
-    msg = await message.reply('Прив')
+    # msg = await message.reply('Прив')
 
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
