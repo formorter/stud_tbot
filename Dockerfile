@@ -14,4 +14,4 @@ ENV GROUP_ID=-610500544
 ENV TZ=Europe/Moscow
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python3", "app.py"]
+ENTRYPOINT [ "python3", "app.py" ]
