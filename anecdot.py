@@ -78,5 +78,3 @@ class Anecdot():
         txt = txt.replace('{"content":"', '')
         txt = txt.replace('"}','')
         return txt
-        
-print('kinda sus')
