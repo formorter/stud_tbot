@@ -1,0 +1,4 @@
+executor.py [LINE:362] #INFO     [2022-02-20 20:18:32,249]  Bot: Jeeels [@Lefruitbot]
+executor.py [LINE:358] #WARNING  [2022-02-20 20:18:33,404]  Updates were skipped successfully.
+dispatcher.py [LINE:358] #INFO     [2022-02-20 20:18:33,596]  Start polling.
+event.py [LINE:21] #INFO     [2022-02-20 20:18:48,657]  Пользователь [zllnsk, id=443808849] подключился

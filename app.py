@@ -5,6 +5,7 @@ from loader import dp
 
 from utils.set_bot_commands import set_default_commands
 
+
 async def on_startup(dispatcher):
     await set_default_commands(dispatcher)
 
