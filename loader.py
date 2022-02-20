@@ -14,7 +14,7 @@ for i, arg in enumerate(sys.argv):
             print('Flag -m detected\nMigrating…')
             database.path_to_database = sys.argv[i + 2]
             database.Schedule.migrate(sys.argv[i + 1])
-bot = Bot(token=os.getenv('MAIN_BOT_TOKEN'), parse_mode=types.ParseMode.HTML)
+bot = Bot(token=os.getenv('TEST_BOT_TOKEN'), parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 # print(sys.argv)
