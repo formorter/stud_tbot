@@ -12,7 +12,6 @@ from anecdot import Anecdot
 """handler напоминания о предстоящих парах"""
 
 chat_ids = {}
-all_lessons = [record.as_dict() for record in Schedule.select()]  # получение всех документов из бд
 
 anecdots = Anecdot()
 
@@ -52,16 +51,13 @@ async def periodic(sleep_for):  # основной метод для обраб�
                 data = f'upperWeek={upperWeek}'
                 f.write(data)
         log(f'Connected users: {chat_ids}')
-        if day_of_week in [record.day for record in Schedule.select()]:
-            for lesson in all_lessons:
-                print(lesson)
-                if upperWeek is lesson['isUpperWeek']:
-                    if day_of_week == lesson['day'] and f"{now}"[11:16] == lesson['time']:
-                        print(f'[{now}]'[11:16], f'{lesson["name"]} - ВЫВЕДЕН')
-                        msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
-                                                           f"\n Пара {lesson['name']} у {lesson['teacher']} "
-                                                           f"\n ссылка на мероприятие: {lesson['links']}",
-                                                           disable_notification=True)
-                        asyncio.create_task(delete_message(msg, 600))
+        for lesson in Schedule.select():
+            if lesson.date == f'{now}, {day_of_week}' and lesson.isUpperWeek == upperWeek:
+                msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
+                                                    f"\n Пара {lesson['name']} у {lesson['teacher']} "
+                                                    f"\n ссылка на мероприятие: {lesson['links']}",
+                                                    disable_notification=True)
+                print(f'[{now}]'[11:16], f'{lesson["name"]} - ВЫВЕДЕН')
+                asyncio.create_task(delete_message(msg, 600))
         else:
             log('Проверка пройдена')

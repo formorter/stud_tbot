@@ -43,8 +43,8 @@ class Schedule(BaseModel):
         except Exception as ex:
             print(ex)
 
-    def as_dict(self):
-        return str(model_to_dict(self))
+    def as_dict(self) -> str:
+        return model_to_dict(self)
 
 if __name__ == '__main__':
     # print([str(_) for _ in Schedule.select()])
