@@ -134,7 +134,7 @@ dmypy.json
 
 # VSCode
 .vscode/
-data/log.txt
+/data/log.txt
 
 # Temp files
 db.sqlite

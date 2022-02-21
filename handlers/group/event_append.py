@@ -1,4 +1,3 @@
-import states
 from loader import dp
 from database import Schedule
 from aiogram.dispatcher import FSMContext
@@ -6,7 +5,7 @@ from aiogram import types
 from states import EventAppendState
 
 
-@dp.message_handler(text='1')
+@dp.message_handler(commands=['event_add'])
 async def first_step(message: types.Message):
     await message.answer(text='🌈🌈🌈 СОЗДАНИЕ СОБЫТИЯ 🌈🌈🌈'
                               'Привет, ты хочешь создать уведомление? Шикарно, заполни форму:'

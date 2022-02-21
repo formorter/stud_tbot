@@ -16,7 +16,7 @@ chat_ids = {}
 anecdots = Anecdot()
 
 
-def log(text: str):
+async def log(text: str):
     logging.info(text)
     if '-v' in sys.argv:
         print(text)
@@ -26,7 +26,7 @@ def log(text: str):
 async def echo(message: types.Message):
     """Бездарный лог"""
     chat_ids[message.chat.id] = message.from_user
-    log(f'Пользователь [{message.chat.username}, id={message.chat.id}] подключился')
+    await log(f'Пользователь [{message.chat.username}, id={message.chat.id}] подключился')
     # text = f'{message.message_id} {message.from_user} {message.text}'
     # msg = await message.reply('Прив')
 
@@ -34,7 +34,7 @@ async def echo(message: types.Message):
 async def delete_message(message: types.Message, sleep_time: int = 0):
     await asyncio.sleep(sleep_time)
     await bot.delete_message(chat_id=os.getenv('GROUP_ID'), message_id=message.message_id)
-    log('Сообщение удалено')
+    await log('Сообщение удалено')
 
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
@@ -50,7 +50,7 @@ async def periodic(sleep_for):  # основной метод для обраб�
                 upperWeek = not upperWeek
                 data = f'upperWeek={upperWeek}'
                 f.write(data)
-        log(f'Connected users: {chat_ids}')
+        await log(f'Connected users: {chat_ids}')
         for lesson in Schedule.select():
             if lesson.date == f'{now}, {day_of_week}' and lesson.isUpperWeek == upperWeek:
                 msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
@@ -59,5 +59,4 @@ async def periodic(sleep_for):  # основной метод для обраб�
                                                     disable_notification=True)
                 print(f'[{now}]'[11:16], f'{lesson["name"]} - ВЫВЕДЕН')
                 asyncio.create_task(delete_message(msg, 600))
-        else:
-            log('Проверка пройдена')
+        await log(f'Проверка пройдена')
