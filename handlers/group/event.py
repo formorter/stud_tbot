@@ -54,6 +54,7 @@ async def periodic(sleep_for):  # основной метод для обраб�
         log(f'Connected users: {chat_ids}')
         if day_of_week in [record.day for record in Schedule.select()]:
             for lesson in all_lessons:
+                print(lesson)
                 if upperWeek is lesson['isUpperWeek']:
                     if day_of_week == lesson['day'] and f"{now}"[11:16] == lesson['time']:
                         print(f'[{now}]'[11:16], f'{lesson["name"]} - ВЫВЕДЕН')

@@ -137,5 +137,4 @@ dmypy.json
 data/log.txt
 
 # Temp files
-_*
 db.sqlite
