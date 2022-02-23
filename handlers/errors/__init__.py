@@ -1,3 +1,3 @@
-from .logger import dp
+from .error_logger import dp
 
 __all__ = ["dp"]
