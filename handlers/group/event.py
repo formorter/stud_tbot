@@ -14,6 +14,7 @@ chat_ids = {}
 
 anecdots = Anecdot()
 
+
 def is_upper_week() -> bool:
     r = requests.request(method='GET', url='http://studydep.miigaik.ru/')
     if r.ok:
@@ -24,6 +25,7 @@ def is_upper_week() -> bool:
             return True
         else:
             raise Exception('Parse error!')
+
 
 @dp.message_handler(CommandStart())
 async def echo(message: types.Message):
@@ -50,16 +52,16 @@ async def periodic(sleep_for):  # основной метод для обраб�
     upperWeek = is_upper_week()
     while True:
         await asyncio.sleep(sleep_for)
-        now = datetime.now()
-        day_of_week = now.strftime('%A')
-        if day_of_week == 'Monday' and datetime.strftime(now,"%H:%M") == '00:00':
+        now = datetime.strftime(datetime.now(), "%H:%M")
+        day_of_week = datetime.strftime(datetime.now(), "%A")
+        if day_of_week == 'Monday' and now == '00:00':
             upperWeek = is_upper_week()
         for lesson in Schedule.select():
-            if lesson.date == f'{now}, {day_of_week}' and lesson.isUpperWeek == upperWeek:
+            if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == upperWeek:
                 msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
                                                     f"\n Пара {lesson.name} у {lesson.teacher} "
                                                     f"\n ссылка на мероприятие: {lesson.link}",
                                                     disable_notification=True)
-                log.info(datetime.strftime(now, "%H:%M"), f'{lesson.name} - ВЫВЕДЕН')
+                log.info(now, f'{lesson.name} - ВЫВЕДЕН')
                 asyncio.create_task(delete_message(msg, 600))
         log.info(f'Проверка пройдена')
