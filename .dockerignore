@@ -11,3 +11,4 @@ _add.py
 _deprecated.py
 _test.py
 README.md
+data/log/*

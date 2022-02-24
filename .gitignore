@@ -139,4 +139,4 @@ dmypy.json
 # Temp files
 db.sqlite
 data/log/log.txt
-data/log.txt
+data/log/log-*
