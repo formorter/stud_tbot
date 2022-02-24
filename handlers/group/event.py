@@ -62,6 +62,6 @@ async def periodic(sleep_for):  # основной метод для обраб�
                                                     f"\n Пара {lesson.name} у {lesson.teacher} "
                                                     f"\n ссылка на мероприятие: {lesson.link}",
                                                     disable_notification=True)
-                log.info(now, f'{lesson.name} - ВЫВЕДЕН')
+                log.info(f'{lesson.name}-{now} - ВЫВЕДЕН')
                 asyncio.create_task(delete_message(msg, 600))
         log.info(f'Проверка пройдена')
