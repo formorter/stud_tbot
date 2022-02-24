@@ -1,5 +1,6 @@
 import os
 import asyncio
+import requests
 from utils.misc.logger import logger as log
 from database import Schedule
 from datetime import datetime
@@ -12,6 +13,17 @@ from anecdot import Anecdot
 chat_ids = {}
 
 anecdots = Anecdot()
+
+def is_upper_week() -> bool:
+    r = requests.request(method='GET', url='http://studydep.miigaik.ru/')
+    if r.ok:
+        week = r.text.split('неделя:')[1].split()[0]
+        if week == "Нижняя":
+            return False
+        elif week == "Верхняя":
+            return True
+        else:
+            raise Exception('Parse error!')
 
 @dp.message_handler(CommandStart())
 async def echo(message: types.Message):
@@ -35,24 +47,19 @@ async def delete_message(message: types.Message, sleep_time: int = 0):
 
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
-    with open('data/conf.txt', 'r') as f:
-        data = f.readline()
-        upperWeek = bool(data.split('=')[1])
+    upperWeek = is_upper_week()
     while True:
         await asyncio.sleep(sleep_for)
         now = datetime.now()
         day_of_week = now.strftime('%A')
         if day_of_week == 'Monday' and datetime.strftime(now,"%H:%M") == '00:00':
-            with open('data/conf.txt', 'w') as f:
-                upperWeek = not upperWeek
-                data = f'upperWeek={upperWeek}'
-                f.write(data)
+            upperWeek = is_upper_week()
         for lesson in Schedule.select():
             if lesson.date == f'{now}, {day_of_week}' and lesson.isUpperWeek == upperWeek:
                 msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
                                                     f"\n Пара {lesson.name} у {lesson.teacher} "
                                                     f"\n ссылка на мероприятие: {lesson.link}",
                                                     disable_notification=True)
-                print(datetime.strftime(now, "%H:%M"), f'{lesson.name} - ВЫВЕДЕН')
+                log.info(datetime.strftime(now, "%H:%M"), f'{lesson.name} - ВЫВЕДЕН')
                 asyncio.create_task(delete_message(msg, 600))
         log.info(f'Проверка пройдена')
