@@ -9,7 +9,7 @@ log_format = logging.Formatter('%(filename)s [LINE:%(lineno)d] #%(levelname)-8s 
 
 file_handler = RotatingFileHandler(filename=f'./data/log/log-{int(time())}.txt', mode='a', maxBytes=500*1024*1024, backupCount=1,encoding='utf-8')
 file_handler.setFormatter(log_format)
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.WARNING)
 logger.addHandler(file_handler)
 
 if '-v' in sys.argv:

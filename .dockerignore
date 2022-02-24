@@ -6,3 +6,8 @@ test_for_db.py
 __pycache__
 *.pyc
 env
+db.json
+_add.py
+_deprecated.py
+_test.py
+README.md

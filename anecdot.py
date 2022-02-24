@@ -1,4 +1,3 @@
-import ast
 from random import choice
 from requests import request
 from typing import List
