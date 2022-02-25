@@ -1,5 +1,4 @@
 from loader import dp
-from database import Schedule
 from aiogram.dispatcher import FSMContext
 from aiogram import types
 from states import EventAppendState

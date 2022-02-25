@@ -58,10 +58,11 @@ async def periodic(sleep_for):  # основной метод для обраб�
             upperWeek = is_upper_week()
         for lesson in Schedule.select():
             if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == upperWeek:
-                msg = await bot.send_message(os.getenv('GROUP_ID'), f"😈 {anecdots.get_random()} 😈\n"
-                                                    f"\n Пара {lesson.name} у {lesson.teacher} "
-                                                    f"\n ссылка на мероприятие: {lesson.link}",
-                                                    disable_notification=True)
-                log.info(f'{lesson.name}-{now} - ВЫВЕДЕН')
-                asyncio.create_task(delete_message(msg, 600))
+                for chat_id in chat_ids:
+                    msg = await bot.send_message(chat_id, f"😈 {anecdots.get_random()} 😈\n"
+                                                        f"\n Пара {lesson.name} у {lesson.teacher} "
+                                                        f"\n ссылка на мероприятие: {lesson.link}",
+                                                        disable_notification=True)
+                    log.info(f'{lesson.name}-{now} - ВЫВЕДЕН')
+                    asyncio.create_task(delete_message(msg, 600))
         log.info(f'Проверка пройдена')
