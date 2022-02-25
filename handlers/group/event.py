@@ -36,7 +36,7 @@ async def echo(message: types.Message):
         chat_ids[message.chat.id] = chat_ids[message.chat.id].append(message.from_user)
     else:
         chat_ids[message.chat.id] = [message.from_user]
-        log.info(f'Пользователь [{message.chat.username}, id={message.chat.id}] подключился')
+        log.info(f'Пользователь [{message.from_user.username}, id={message.chat.id}] подключился')
         log.info(f'Connected users: {chat_ids}')
     # text = f'{message.message_id} {message.from_user} {message.text}'
     # msg = await message.reply('Прив')
