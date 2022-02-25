@@ -1,5 +1,7 @@
+from enum import unique
 import json
-from peewee import Model, SqliteDatabase, AutoField, CharField, TimeField, BooleanField, TextField, DateField
+from tokenize import group
+from peewee import Model, SqliteDatabase, AutoField, CharField, TimeField, BooleanField, TextField, DateField, BigIntegerField, SmallIntegerField, ForeignKeyField
 from playhouse.shortcuts import model_to_dict
 
 path_to_database = 'db.sqlite'
@@ -45,6 +47,20 @@ class Schedule(BaseModel):
 
     def as_dict(self) -> str:
         return model_to_dict(self)
+
+class User(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.create_table()
+
+    pk_user_id=AutoField(unique=True, column_name='pkUserId', primary_key=True)
+    user_id=BigIntegerField(unique=True, column_name='userId')
+    username=CharField(max_length=100, unique=True, column_name='username')
+    user_chat_id=BigIntegerField(unique=True, column_name='userChatId')
+    group_id=BigIntegerField(column_name='groupId')
+    permissions=SmallIntegerField(column_name='permissions', default=0)
+    userschedulefk=ForeignKeyField(Schedule, backref='+',on_delete='CASCADE',lazy_load=True, backref='user')
+
 
 if __name__ == '__main__':
     # print([str(_) for _ in Schedule.select()])
