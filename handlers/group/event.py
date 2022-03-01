@@ -41,27 +41,6 @@ async def echo(message: types.Message):
     # text = f'{message.message_id} {message.from_user} {message.text}'
     # msg = await message.reply('Прив')
 
-@dp.message_handler(commands=['ping'])
-async def ping_command(message: types.Message):
-    await bot.send_message(message.chat.id, 'pong!')
-    log.info('Pong command from {}'.format(message.from_user.username))
-
-@dp.message_handler(commands=['schedule'])
-async def schedule_command(message: types.Message):
-    day = datetime.strftime(datetime.now(), '%A')
-    sep = '\n'+'-'*20+'\n'
-    schedule = []
-    for record in Schedule.select():
-        if record.day == day and record.isUpperWeek == is_upper_week():
-            schedule.append(f'{record.time} - {record.name}')
-    
-    await bot.send_message(message.chat.id, sep.join(schedule))
-    log.info('Schedule command from {}'.format(message.from_user.username))
-
-@dp.message_handler(commands=['week'])
-async def week_command(message: types.Message):
-    await bot.send_message(message.chat.id, 'Верхняя'if is_upper_week() else 'Нижняя')
-    log.info('Week command from {}'.format(message.from_user.username))
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
     await asyncio.sleep(sleep_time)

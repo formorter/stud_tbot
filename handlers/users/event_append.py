@@ -6,6 +6,7 @@ from states import EventAppendState
 
 @dp.message_handler(commands=['event_add'])
 async def first_step(message: types.Message):
+    await EventAppendState.set_new_event.set()
     await message.answer(text='🌈🌈🌈 СОЗДАНИЕ СОБЫТИЯ 🌈🌈🌈'
                               'Привет, ты хочешь создать уведомление? Шикарно, заполни форму:'
                               '\n1.Название пары:'
@@ -14,7 +15,6 @@ async def first_step(message: types.Message):
                               '\n3.Верхняя или нижняя неделя:'
                               '\n4.Ссылка на мероприятие:'
                               '\n5.В какое время отправить уведомление:')
-    await EventAppendState.set_new_event.set()
 
 
 @dp.message_handler(state=EventAppendState.set_new_event)
