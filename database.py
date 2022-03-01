@@ -1,7 +1,7 @@
-from enum import unique
 import json
-from tokenize import group
-from peewee import Model, SqliteDatabase, AutoField, CharField, TimeField, BooleanField, TextField, DateField, BigIntegerField, SmallIntegerField, ForeignKeyField
+from peewee import (Model, SqliteDatabase, AutoField, CharField, 
+                    TimeField, BooleanField, TextField, DateField, 
+                    BigIntegerField, SmallIntegerField, ForeignKeyField)
 from playhouse.shortcuts import model_to_dict
 
 path_to_database = 'db.sqlite'
@@ -59,7 +59,7 @@ class User(BaseModel):
     user_chat_id=BigIntegerField(unique=True, column_name='userChatId')
     group_id=BigIntegerField(column_name='groupId')
     permissions=SmallIntegerField(column_name='permissions', default=0)
-    userschedulefk=ForeignKeyField(Schedule, backref='+',on_delete='CASCADE',lazy_load=True, backref='user')
+    userschedulefk=ForeignKeyField(Schedule, on_delete='CASCADE',lazy_load=True, backref='user')
 
 
 if __name__ == '__main__':

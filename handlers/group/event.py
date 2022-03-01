@@ -41,6 +41,27 @@ async def echo(message: types.Message):
     # text = f'{message.message_id} {message.from_user} {message.text}'
     # msg = await message.reply('Прив')
 
+@dp.message_handler(commands=['ping'])
+async def ping_command(message: types.Message):
+    await bot.send_message(message.chat.id, 'pong!')
+    log.info('Pong command from {}'.format(message.from_user.username))
+
+@dp.message_handler(commands=['schedule'])
+async def schedule_command(message: types.Message):
+    day = datetime.strftime(datetime.now(), '%A')
+    sep = '\n'+'-'*20+'\n'
+    schedule = []
+    for record in Schedule.select():
+        if record.day == day and record.isUpperWeek == is_upper_week():
+            schedule.append(f'{record.time} - {record.name}')
+    
+    await bot.send_message(message.chat.id, sep.join(schedule))
+    log.info('Schedule command from {}'.format(message.from_user.username))
+
+@dp.message_handler(commands=['week'])
+async def week_command(message: types.Message):
+    await bot.send_message(message.chat.id, 'Верхняя'if is_upper_week() else 'Нижняя')
+    log.info('Week command from {}'.format(message.from_user.username))
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
     await asyncio.sleep(sleep_time)
@@ -50,12 +71,14 @@ async def delete_message(message: types.Message, sleep_time: int = 0):
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
     upperWeek = is_upper_week()
+    log.info(f'Checked site. Is upper returned: {upperWeek}')
     while True:
         await asyncio.sleep(sleep_for)
         now = datetime.strftime(datetime.now(), "%H:%M")
         day_of_week = datetime.strftime(datetime.now(), "%A")
-        if day_of_week == 'Monday' and now == '00:00':
+        if day_of_week == 'Monday' and now == '07:00':
             upperWeek = is_upper_week()
+            log.info(f'Checked site. Is upper returned: {upperWeek}')
         for lesson in Schedule.select():
             if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == upperWeek:
                 for chat_id in chat_ids:
