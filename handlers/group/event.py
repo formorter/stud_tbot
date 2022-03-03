@@ -51,13 +51,19 @@ async def delete_message(message: types.Message, sleep_time: int = 0):
 
 
 async def periodic(sleep_for):  # основной метод для обработки данных из бд
+    log.info(f'Checked site. Is upper returned: {is_upper_week()}')
     while True:
+        total_checks = 0
         await asyncio.sleep(sleep_for)
         now = datetime.strftime(datetime.now(), "%H:%M")
         day_of_week = datetime.strftime(datetime.now(), "%A")
         _is_upper_week = is_upper_week()
+        if day_of_week == 'Monday' and now == '07:00':
+            log.info(f'Checked site. Is upper returned: {is_upper_week()}')
         for lesson in Schedule.select():
-            if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == _is_upper_week:
+            if lesson.day == day_of_week and lesson.isUpperWeek == is_upper_week():
+                total_checks += 1
+            if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == is_upper_week():
                 for chat_id in chat_ids:
                     msg = await bot.send_message(chat_id, f"😈 {anecdots.get_random()} 😈\n"
                                                         f"\n Пара {lesson.name} у {lesson.teacher} "
@@ -65,4 +71,6 @@ async def periodic(sleep_for):  # основной метод для обраб�
                                                         disable_notification=True)
                     log.info(f'{lesson.name}-{now} - ВЫВЕДЕН')
                     asyncio.create_task(delete_message(msg, 600))
-        log.info(f'Проверка пройдена. (now:{day_of_week},{now}, upperWeek:{_is_upper_week},\nchats:{chat_ids})')
+        log.info(f'Проверка пройдена. (now:{day_of_week},{now}, upperWeek:{_is_upper_week},'
+                 f'\nchats:{chat_ids}, '
+                 f'\ntotal checks: [{total_checks}])')
