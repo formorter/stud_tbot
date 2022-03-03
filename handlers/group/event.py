@@ -59,11 +59,11 @@ async def periodic(sleep_for):  # основной метод для обраб�
         day_of_week = datetime.strftime(datetime.now(), "%A")
         _is_upper_week = is_upper_week()
         if day_of_week == 'Monday' and now == '07:00':
-            log.info(f'Checked site. Is upper returned: {is_upper_week()}')
+            log.info(f'Checked site. Is upper returned: {_is_upper_week}')
         for lesson in Schedule.select():
-            if lesson.day == day_of_week and lesson.isUpperWeek == is_upper_week():
+            if lesson.day == day_of_week and lesson.isUpperWeek == _is_upper_week:
                 total_checks += 1
-            if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == is_upper_week():
+            if lesson.time == now and lesson.day == day_of_week and lesson.isUpperWeek == _is_upper_week:
                 for chat_id in chat_ids:
                     msg = await bot.send_message(chat_id, f"😈 {anecdots.get_random()} 😈\n"
                                                         f"\n Пара {lesson.name} у {lesson.teacher} "
