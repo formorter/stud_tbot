@@ -10,5 +10,6 @@ async def set_default_commands(dp):
             types.BotCommand("week", "Отобразить тип недели"),
             types.BotCommand("ping", "pong!"),
             types.BotCommand("schedule", "Вывести расписание на сегодняшний день"),
+            types.BotCommand("chatids", "Выводит список Chat IDs"),
         ]
     )

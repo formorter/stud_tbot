@@ -3,7 +3,7 @@ from database import Schedule
 from datetime import datetime
 from loader import dp, bot
 from utils.misc.logger import logger as log
-from handlers.group.event import is_upper_week
+from handlers.group.event import is_upper_week, chat_ids
 
 @dp.message_handler(commands=['ping'])
 async def ping_command(message: types.Message):
@@ -22,6 +22,12 @@ async def schedule_command(message: types.Message):
 
     await bot.send_message(message.chat.id, sep.join(schedule))
     log.info('Schedule command from {}'.format(message.from_user.username))
+
+
+@dp.message_handler(commands=['chatids'])
+async def chat_ids_command(message: types.Message):
+    await bot.send_message(message.chat.id, chat_ids)
+    log.info('Chat IDs command from {}'.format(message.from_user.username))
 
 
 @dp.message_handler(commands=['week'])
