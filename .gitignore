@@ -140,3 +140,4 @@ dmypy.json
 db.sqlite
 data/log/log.txt
 data/log/log-*
+test_db.sqlite

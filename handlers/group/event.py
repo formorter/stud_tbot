@@ -46,7 +46,7 @@ async def echo(message: types.Message):
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
     await asyncio.sleep(sleep_time)
-    await bot.delete_message(chat_id=os.getenv('GROUP_ID'), message_id=message.message_id)
+    await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     log.info('Сообщение {} успешно удалено'.format(message.message_id))
 
 
@@ -70,7 +70,7 @@ async def periodic(sleep_for):  # основной метод для обраб�
                                                         f"\n ссылка на мероприятие: {lesson.link}",
                                                         disable_notification=True)
                     log.info(f'{lesson.name}-{now} - ВЫВЕДЕН')
-                    asyncio.create_task(delete_message(msg, 600))
+                    asyncio.create_task(delete_message(msg, 900))
         log.info(f'Проверка пройдена. (now:{day_of_week},{now}, upperWeek:{_is_upper_week},'
                  f'\nchats:{chat_ids}, '
                  f'\ntotal checks: [{total_checks}])')

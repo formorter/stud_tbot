@@ -4,6 +4,7 @@ from datetime import datetime
 from loader import dp, bot
 from utils.misc.logger import logger as log
 from handlers.group.event import is_upper_week, chat_ids
+from re import split
 
 @dp.message_handler(commands=['ping'])
 async def ping_command(message: types.Message):
@@ -29,7 +30,7 @@ async def schedule_command(message: types.Message):
         if len(args) == 2:
             if args[0] in days:
                 if args[1] in weeks:
-                    day = args[0]
+                    day = args[0]   
                     week = True if args[1] == 'Верхняя' else False
                     schedule.append(f'Расписание на {args[0]}. Неделя: {args[1]}')
                 else:
@@ -48,6 +49,16 @@ async def schedule_command(message: types.Message):
 
     await bot.send_message(message.chat.id, sep.join(schedule))
     log.info('Schedule command from {}'.format(message.from_user.username))
+
+
+@dp.message_handler(commands=['edit'])
+async def edit_command(message: types.Message):
+    args = message.get_args()
+    if not args:
+        await bot.send_message('Требуются аргументы! /edit [id] (<field:value>) ...')
+    args = split('\([^)]*\)', args)
+    
+    
 
 
 @dp.message_handler(commands=['chatids'])
